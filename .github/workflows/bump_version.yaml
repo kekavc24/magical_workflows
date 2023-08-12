@@ -5,7 +5,8 @@ on:
         inputs:
             target:
                 description: 'A SEMVER version target - major/minor/patch'
-                required: true
+                default: " "
+                required: false
                 type: string
 
             bump-build-number:
@@ -28,15 +29,12 @@ jobs:
             - name: 📚 Git Checkout
               uses: actions/checkout@v3
 
-            - name: 🛂 Ensure target input is added
-              shell: bash
-              run: |
-                if [ -z "${{ inputs.target }}"]
-                then
-                    echo "You need to provide a target";
-                    exit 1;
-                fi
-
+            - name: 🛂 Ensure at least target or build number is passed
+              if: ${{ (inputs.bump-build-number  == false) && inputs.target  == ' ' }}
+              run: | 
+                echo "No parameters specified"
+                exit 1
+                
             - name: 🎯 Setup Dart
               uses: dart-lang/setup-dart@v1
               with:
@@ -45,6 +43,14 @@ jobs:
             - name: ⚡ Activate Magical Bump CLI
               run: dart pub global activate magical_version_bump
 
-            - name: ➕ Bump version
-              shell: bash
-              run: echo ${{ inputs.bump-build-number }}
+            - name: ➕ Bump version only
+              if: ${{ (inputs.bump-build-number  == false) && inputs.target  != ' ' }}
+              run: mag modify -b --${{inputs.target}} --set-path="${{inputs.path}}"
+
+            - name: ➕ Bump version & build number
+              if: ${{ (inputs.bump-build-number  == true) && inputs.target  != ' ' }}
+              run: mag modify -b --${{inputs.target}} --build-number --set-path="${{inputs.path}}"
+
+            - name: ➕ Bump build number only
+              if: ${{ (inputs.bump-build-number  == true) && inputs.target  == ' ' }}
+              run: mag modify -b --build-number --set-path="${{inputs.path}}"
