@@ -1,0 +1,50 @@
+name: Bump SEMVER Version ➕
+
+on:
+    workflow_call:
+        inputs:
+            target:
+                description: 'A SEMVER version target - major/minor/patch'
+                required: true
+                type: string
+
+            bump-build-number:
+                description: 'Indicate whether to bump the build number'
+                default: false
+                required: false
+                type: boolean
+
+            path:
+                description: 'Path to find the yaml/json file'
+                default: 'pubspec.yaml'
+                required: false
+                type: string
+
+jobs:
+    update-version:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: 📚 Git Checkout
+              uses: actions/checkout@v3
+
+            - name: 🛂 Ensure target input is added
+              shell: bash
+              run: |
+                if [ -z "${{ inputs.target }}"]
+                then
+                    echo "You need to provide a target";
+                    exit 1;
+                fi
+
+            - name: 🎯 Setup Dart
+              uses: dart-lang/setup-dart@v1
+              with:
+                sdk: stable
+
+            - name: ⚡ Activate Magical Bump CLI
+              run: dart pub global activate magical_version_bump
+
+            - name: ➕ Bump version
+              shell: bash
+              run: echo ${{ inputs.bump-build-number }}
