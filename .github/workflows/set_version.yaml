@@ -1,0 +1,63 @@
+name: Set SEMVER Version
+
+on:
+    workflow_call:
+        inputs:
+            version:
+                description: 'Version to set in yaml/json'
+                required: true
+                type: string
+
+            keep-pre:
+                description: 'Indicate whether to keep pre-release version'
+                default: false
+                required: false
+                type: boolean
+
+            keep-build:
+                description: 'Indicate whether to keep build-number'
+                default: false
+                required: false
+                type: boolean
+
+            path:
+                description: 'Path to find the yaml/json file'
+                default: 'pubspec.yaml'
+                required: false
+                type: string
+
+jobs:
+    set-version:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: 📚 Git Checkout
+              uses: actions/checkout@v3
+
+            - name: 🛂 Ensure version is passed
+              if: ${{ inputs.version == '' }}
+              run: |
+                echo "No version was specified"
+                exit 1
+
+            - name: 🔍 Check for targets to keep
+              id: check-targets
+              run: |
+                targets="";
+                if (${{ inputs.keep-build }} == true); then targets="--keep-build"; fi;
+                if (${{ inputs.keep-pre }} == true); then targets="${targets} --keep-pre"; fi;
+                echo "targets=${targets}" >> "$GITHUB_OUTPUT"
+
+            - name: 🎯 Setup Dart
+              uses: dart-lang/setup-dart@v1
+              with:
+                sdk: stable
+  
+            - name: ⚡ Activate Magical Bump CLI
+              run: dart pub global activate magical_version_bump
+  
+            - name: 🏪 Set version
+              run: |
+                mag change --set-version="${{ inputs.version }}" --set-path="${{ inputs.path }}" ${{ steps.check-targets.outputs.targets }}
+                
+    
