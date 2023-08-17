@@ -24,13 +24,6 @@ runs:
   using: "composite"
 
   steps:
-    - name: 🛂 Ensure at least target or build number is passed
-      if: ${{ (inputs.bump-build-number  == false) && inputs.target  == ' ' }}
-      shell: bash
-      run: | 
-        echo "No parameters specified"
-        exit 1
-
     # Make sure you activate dart sdk!
     - name: ⚡ Activate Magical Bump CLI
       shell: bash
