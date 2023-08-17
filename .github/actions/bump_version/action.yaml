@@ -53,16 +53,6 @@ runs:
         fi
         echo "args=$TARGETS" | tee -a $GITHUB_OUTPUT
 
-    - name: ➕ Bump version only
+    - name: ✅ Bump version
       shell: bash
       run: mag modify -b ${{ steps.check_targets.outputs.args }} --set-path="${{ inputs.path }}"
-
-    # - name: ➕ Bump version & build number
-    #   if: inputs.bump-build-number  == true && inputs.target  != 'null'
-    #   shell: bash
-    #   run: mag modify -b --${{ inputs.target }} --build-number --set-path="${{ inputs.path }}"
-
-    # - name: ➕ Bump build number only
-    #   if: (inputs.bump-build-number  == true) && inputs.target  == ' ' 
-    #   shell: bash
-    #   run: mag modify -b --build-number --set-path="${{ inputs.path }}"
