@@ -5,7 +5,7 @@ Refer to the package's documentation for more info.
 
 ## Overview
 The available workflows include:
-* Bump version - bumps version in yaml file. You need to pass in desired target.
+* Bump version - bumps version in yaml file. You need to pass in a desired target.
 * Set version - overwrites current version in yaml file. Just pass in the version.
 
 Consider using `v2` which can be integrated as a step rather using `v1`. Why?
@@ -15,11 +15,11 @@ Consider using `v2` which can be integrated as a step rather using `v1`. Why?
 
 ## Bump version
 This workflow takes in optional parameters :
-* target - A [semVer][semver_link] version target. Must be a string. `major`, `minor` or `minor`. 
-* bump-build-number - Nudges workflow to bump build number too. Must be a boolean. `true` or `false`
-* path - path to yaml. The path must include the file too. Default path is `pubspec.yaml`
+* `target` - A [semVer][semver_link] version target. Must be a string. `major`, `minor` or `minor`. 
+* `bump-build-number` - Nudges workflow to bump the build number too. Must be a boolean. `true` or `false`
+* `path` - Path to yaml. The path must include the file too. Default path is `pubspec.yaml`
 
-You must include at least one of `target` or `bump-build-number`. If none are included, the workflow terminates with an error.
+You must include at least one of `target` or `bump-build-number`. If none are included, the action terminates with an error.
 
 ``` yaml
 # Check tags for desired version.
@@ -36,14 +36,14 @@ You must include at least one of `target` or `bump-build-number`. If none are in
 
 ## Set version
 This workflow takes in these parameters :
-* version - Version to update to. Must be a string. This parameter is required. 
-* keep-pre - Keep any pre-release info. Must be a boolean. `true` or `false`
-* keep-build - Keep any build info. Must be a boolean. `true` or `false`
-* path - path to yaml. The path must include the file too. Default path is `pubspec.yaml`
+* `version` - Version to update to. Must be a string. This parameter is required. 
+* `keep-pre` - Keep any pre-release info. Must be a boolean. `true` or `false`
+* `keep-build` - Keep any build info. Must be a boolean. `true` or `false`
+* `path` - path to yaml. The path must include the file too. Default path is `pubspec.yaml`
 
-You must include `version`. If not included, the workflow terminates with an error.
+You must include `version`. If not included, the action terminates with an error.
 
-If `keep-pre` or `keep-build` is set to true and none is present on the old version, the workflow terminates with an error.
+If `keep-pre` or `keep-build` is set to true and none is present on the old version, the action terminates with an error.
 
 ``` yaml
 # Check tags for desired version.
