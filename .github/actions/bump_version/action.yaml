@@ -1,0 +1,47 @@
+name: 'Bump version'
+description: Bumps semVer version string
+
+inputs:
+  target:
+    description: 'A SEMVER version target - major/minor/patch'
+    default: ""
+    required: false
+    type: string
+
+  bump-build-number:
+    description: 'Indicate whether to bump the build number'
+    default: false
+    required: false
+    type: boolean
+
+  path:
+    description: 'Path to find the yaml/json file'
+    default: 'pubspec.yaml'
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: 🛂 Ensure at least target or build number is passed
+      if: ${{ (inputs.bump-build-number  == false) && inputs.target  == ' ' }}
+      run: | 
+        echo "No parameters specified"
+        exit 1
+
+    # Make sure you activate dart sdk!
+    - name: ⚡ Activate Magical Bump CLI
+      run: dart pub global activate magical_version_bump
+
+    - name: ➕ Bump version only
+      if: ${{ (inputs.bump-build-number  == false) && inputs.target  != ' ' }}
+      run: mag modify -b --${{ inputs.target }} --set-path="${{ inputs.path }}"
+
+    - name: ➕ Bump version & build number
+      if: ${{ (inputs.bump-build-number  == true) && inputs.target  != ' ' }}
+      run: mag modify -b --${{ inputs.target }} --build-number --set-path="${{ inputs.path }}"
+
+    - name: ➕ Bump build number only
+      if: ${{ (inputs.bump-build-number  == true) && inputs.target  == ' ' }}
+      run: mag modify -b --build-number --set-path="${{ inputs.path }}"
