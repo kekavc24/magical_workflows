@@ -1,0 +1,51 @@
+name: 'Bump version'
+description: Bumps semVer version string
+
+inputs:
+  target:
+    description: 'A SEMVER version target - major/minor/patch'
+    default: "null"
+    required: false
+    type: string
+
+  bump-build-number:
+    description: 'Indicate whether to bump the build number'
+    default: false
+    required: false
+    type: boolean
+
+  path:
+    description: 'Path to find the yaml/json file'
+    default: 'pubspec.yaml'
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+
+  steps:
+    # Make sure you activate dart sdk!
+    - name: ⚡ Activate Magical Bump CLI
+      shell: bash
+      run: dart pub global activate magical_version_bump
+
+    - name: 🔍 Get targets
+      id: check_targets
+      shell: bash
+      run: |
+        TARGETS="--"
+        versionTarget="${{inputs.target}}"
+        echo $versionTarget
+        if [[ "${{inputs.bump-build-number}}" == "true" ]]; then
+          TARGETS+="build-number --"
+        fi
+        if [[ -z "${{inputs.target}}" ]]; then
+          echo "noop"
+        else
+          TARGETS+="${versionTarget}"
+        fi
+        echo "args=$TARGETS" | tee -a $GITHUB_OUTPUT
+
+    - name: ✅ Bump version
+      shell: bash
+      run: mag modify -b ${{ steps.check_targets.outputs.args }} --set-path="${{ inputs.path }}"

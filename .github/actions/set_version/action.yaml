@@ -1,0 +1,52 @@
+name: Set version
+description: Set version to desired string
+
+inputs: 
+  version:
+    description: 'Version to set in yaml/json'
+    required: true
+    type: string
+
+  keep-pre:
+    description: 'Indicate whether to keep pre-release version'
+    default: false
+    required: false
+    type: boolean
+
+  keep-build:
+    description: 'Indicate whether to keep build-number'
+    default: false
+    required: false
+    type: boolean
+
+  path:
+    description: 'Path to find the yaml/json file'
+    default: 'pubspec.yaml'
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: 🛂 Ensure version is passed
+      if: ${{ inputs.version == '' }}
+      run: |
+        echo "No version was specified"
+        exit 1
+
+    - name: 🔍 Check for targets to keep
+      id: check_targets
+      run: |
+        targets="";
+        if (${{ inputs.keep-build }} == true); then targets="--keep-build"; fi;
+        if (${{ inputs.keep-pre }} == true); then targets="${targets} --keep-pre"; fi;
+        echo "targets=${targets}" >> "$GITHUB_OUTPUT"
+
+    # Make sure you activate dart sdk!
+    - name: ⚡ Activate Magical Bump CLI
+      shell: bash
+      run: dart pub global activate magical_version_bump
+
+    - name: 🏪 Set version
+      run: mag change --set-version="${{ inputs.version }}" --set-path="${{ inputs.path }}" ${{ steps.check_targets.outputs.targets }}
