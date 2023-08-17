@@ -17,7 +17,9 @@ This workflow takes in optional parameters :
 You must include at least one of `target` or `bump-build-number`. If none are included, the workflow terminates with an error.
 
 ``` yaml
-uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@main
+# Check tags for desired version.
+
+uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@v1
 with:
     target: "major" # Optional. 
     bump-build-number: true # Optional. Default is false
@@ -38,7 +40,9 @@ You must include `version`. If not included, the workflow terminates with an err
 If `keep-pre` or `keep-build` is set to true and none is present on the old version, the workflow terminates with an error.
 
 ``` yaml
-uses: kekavc24/magical_workflows/.github/workflows/set_version.yaml@main
+# Check tags for desired version.
+
+uses: kekavc24/magical_workflows/.github/workflows/set_version.yaml@v1
 with:
     version: "2.0.0" # Required. 
     keep-pre: true # Optional. Default is false
