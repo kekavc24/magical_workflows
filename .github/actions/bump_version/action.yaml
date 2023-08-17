@@ -4,7 +4,7 @@ description: Bumps semVer version string
 inputs:
   target:
     description: 'A SEMVER version target - major/minor/patch'
-    default: ""
+    default: "null"
     required: false
     type: string
 
@@ -36,17 +36,33 @@ runs:
       shell: bash
       run: dart pub global activate magical_version_bump
 
+    - name: 🔍 Get targets
+      id: check_targets
+      shell: bash
+      run: |
+        TARGETS="--"
+        versionTarget="${{inputs.target}}"
+        echo $versionTarget
+        if [[ "${{inputs.bump-build-number}}" == "true" ]]; then
+          TARGETS+="build-number --"
+        fi
+        if [[ -z "${{inputs.target}}" ]]; then
+          echo "noop"
+        else
+          TARGETS+="${versionTarget}"
+        fi
+        echo "args=$TARGETS" | tee -a $GITHUB_OUTPUT
+
     - name: ➕ Bump version only
-      if: ${{ (inputs.bump-build-number  == false) && inputs.target  != ' ' }}
       shell: bash
-      run: mag modify -b --${{ inputs.target }} --set-path="${{ inputs.path }}"
+      run: mag modify -b ${{ steps.check_targets.outputs.args }} --set-path="${{ inputs.path }}"
 
-    - name: ➕ Bump version & build number
-      if: ${{ (inputs.bump-build-number  == true) && inputs.target  != ' ' }}
-      shell: bash
-      run: mag modify -b --${{ inputs.target }} --build-number --set-path="${{ inputs.path }}"
+    # - name: ➕ Bump version & build number
+    #   if: inputs.bump-build-number  == true && inputs.target  != 'null'
+    #   shell: bash
+    #   run: mag modify -b --${{ inputs.target }} --build-number --set-path="${{ inputs.path }}"
 
-    - name: ➕ Bump build number only
-      if: ${{ (inputs.bump-build-number  == true) && inputs.target  == ' ' }}
-      shell: bash
-      run: mag modify -b --build-number --set-path="${{ inputs.path }}"
+    # - name: ➕ Bump build number only
+    #   if: (inputs.bump-build-number  == true) && inputs.target  == ' ' 
+    #   shell: bash
+    #   run: mag modify -b --build-number --set-path="${{ inputs.path }}"
