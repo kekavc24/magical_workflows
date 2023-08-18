@@ -13,6 +13,16 @@ Consider using `v2` which can be integrated as a step rather using `v1`. Why?
 2. `v2` is an action and thus can be used as a step and any changes will reflect in the current job calling it.
 3. Reusable workflows must be triggered as a `job` while actions are triggered in `steps`. [Learn more][learn_more_link]
 
+Make sure you globally activate the dart sdk in a previous step. Dart is required to activate [magical_version_bump][mvb_pub_link] executable.
+```yaml
+
+uses: dart-lang/setup-dart@v1
+with:
+  sdk: "stable"
+
+# You can use any sdk available.
+```
+
 ## Bump version
 This workflow takes in optional parameters :
 * `target` - A [semVer][semver_link] version target. Must be a string. `major`, `minor` or `minor`. 
