@@ -19,6 +19,6 @@ runs:
     - name: 🔍 Extract version
       id: extract
       run: |
-        version="$(cat pubspec.yaml | grep "version:" | head -1 | awk -F: '{print $2};' | tr -d "[:blank:]")"
+        version="$(cat ${{ inputs.path }} | grep "version:" | head -1 | awk -F: '{print $2};' | tr -d "[:blank:]")"
         echo "Version: $version"
         echo "version=$version" >> "$GITHUB_OUTPUT"
