@@ -18,7 +18,9 @@ inputs:
     type: boolean
 
 outputs:
-  target: ${{ steps.extract.outputs.target }}
+  target: 
+    description: A semver target to bump
+    value: ${{ steps.extract.outputs.target }}
 
 runs:
   using: "composite"
