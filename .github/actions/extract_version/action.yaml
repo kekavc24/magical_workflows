@@ -18,6 +18,7 @@ runs:
   steps:
     - name: 🔍 Extract version
       id: extract
+      shell: bash
       run: |
         version="$(cat ${{ inputs.path }} | grep "version:" | head -1 | awk -F: '{print $2};' | tr -d "[:blank:]")"
         echo "Version: $version"

@@ -31,12 +31,14 @@ runs:
   steps:
     - name: 🛂 Ensure version is passed
       if: ${{ inputs.version == '' }}
+      shell: bash
       run: |
         echo "No version was specified"
         exit 1
 
     - name: 🔍 Check for targets to keep
       id: check_targets
+      shell: bash
       run: |
         targets="";
         if (${{ inputs.keep-build }} == true); then targets="--keep-build"; fi;
@@ -49,4 +51,5 @@ runs:
       run: dart pub global activate magical_version_bump
 
     - name: 🏪 Set version
+      shell: bash
       run: mag change --set-version="${{ inputs.version }}" --set-path="${{ inputs.path }}" ${{ steps.check_targets.outputs.targets }}
