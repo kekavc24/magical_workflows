@@ -32,7 +32,7 @@ runs:
       run: |
         target="";
         if (${{ inputs.major }} == true); then target="major";
-        elif ${{ inputs.minor }} == true); then target="minor";
+        elif (${{ inputs.minor }} == true); then target="minor";
         else (${{ inputs.patch }} == true); then target="patch";
         fi;
         echo "target=${target}" >> "$GITHUB_OUTPUT"
