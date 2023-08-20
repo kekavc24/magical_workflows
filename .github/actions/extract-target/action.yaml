@@ -31,8 +31,11 @@ runs:
       shell: bash
       run: |
         target="";
-        if (${{ inputs.major }} == true); then target="major";
-        elif (${{ inputs.minor }} == true); then target="minor";
-        else (${{ inputs.patch }} == true); then target="patch";
+        if [[${{ inputs.major }} == "true"]]; then
+          target="major"
+        elif [[${{ inputs.minor }} == "true"]]; then
+          target="minor"
+        else
+          target="patch"
         fi;
         echo "target=${target}" >> "$GITHUB_OUTPUT"
