@@ -2,6 +2,13 @@ name: Bump version in Dart project
 
 on:
   workflow_call:
+    secrets:
+      ACCESS_TOKEN:
+        required: true
+      
+      BOT_GPG_KEY:
+        required: true
+
     inputs:
       trigger_major:
           description: Whether to add major as target
