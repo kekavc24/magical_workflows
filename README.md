@@ -14,6 +14,8 @@ Access documentation about actions at [ACTIONS.md](/ACTIONS.md)
 
 Access documentation about workflows at [WORKFLOWS.md](/WORKFLOWS.md)
 
+**CAUTION**: Be careful when choosing a tag to prevent erroneous bumps/commits/tags
+
 [mvb_github_link]: https://github.com/kekavc24/magical_version_bump
 [mvb_pub_link]: https://pub.dev/packages/magical_version_bump
 [learn_more_link]: https://dev.to/github/whats-the-difference-between-a-github-action-and-a-workflow-2gba
