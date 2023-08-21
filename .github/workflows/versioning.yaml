@@ -22,7 +22,7 @@ jobs:
               
     update-version:
         needs: verify-merge
-        uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@v2.0.5
+        uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@v2.1.0
         with:
             trigger_major: ${{contains(github.event.pull_request.labels.*.name, 'major release')}}
             trigger_minor: ${{contains(github.event.pull_request.labels.*.name, 'minor release')}}
