@@ -1,0 +1,25 @@
+name: Extract version
+description: Extracts version from yaml/json file
+
+inputs:
+  path:
+    description: Path to yaml/json file
+    required: true
+    type: string
+
+outputs:
+  version:
+    description: Value of the first version node in yaml/json file
+    value: ${{ steps.extract.outputs.version }}
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: 🔍 Extract version
+      id: extract
+      shell: bash
+      run: |
+        version="$(cat ${{ inputs.path }} | grep "version:" | head -1 | awk -F: '{print $2};' | tr -d "[:blank:]")"
+        echo "Version: $version"
+        echo "version=$version" >> "$GITHUB_OUTPUT"

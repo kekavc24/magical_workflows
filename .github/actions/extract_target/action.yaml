@@ -1,0 +1,41 @@
+name: 'Extract target'
+description: Extracts target to bump in version
+
+inputs:
+  major:
+    description: 'Trigger for major version'
+    required: true
+    type: boolean
+
+  minor:
+    description: 'Trigger for minor version'
+    required: true
+    type: boolean
+
+  patch:
+    description: 'Trigger for patch version'
+    required: true
+    type: boolean
+
+outputs:
+  target: 
+    description: A semver target to bump
+    value: ${{ steps.extract.outputs.target }}
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: 🔍 Extract target
+      id: extract
+      shell: bash
+      run: |
+        target="";
+        if [[${{ inputs.major }} == "true"]]; then
+          target="major"
+        elif [[${{ inputs.minor }} == "true"]]; then
+          target="minor"
+        else
+          target="patch"
+        fi;
+        echo "target=${target}" >> "$GITHUB_OUTPUT"

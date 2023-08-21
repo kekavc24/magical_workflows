@@ -1,0 +1,37 @@
+name: Temp Bump Version
+
+on:
+    pull_request:
+        branches: ["main"]
+        types: [closed]
+
+jobs:
+    verify-merge:
+        runs-on: ubuntu-latest
+
+        steps: 
+            - uses: actions/checkout@v3
+
+            - name: 🛂 Ensure pull request was merged
+              if: ${{ github.event.pull_request.merged != true }}
+              run: exit 1
+
+            - name: 🛂 Ensure PR is a release
+              if: ${{! contains(github.event.pull_request.labels.*.name, 'tagged release')}}
+              run: exit 1
+              
+    update-version:
+        needs: verify-merge
+        uses: kekavc24/magical_workflows/.github/workflows/bump_dart_project.yaml@main
+        with:
+            trigger_major: ${{contains(github.event.pull_request.labels.*.name, 'major release')}}
+            trigger_minor: ${{contains(github.event.pull_request.labels.*.name, 'minor release')}}
+            trigger_patch: ${{contains(github.event.pull_request.labels.*.name, 'patch release')}}
+            bump_build: false
+            create_tag: true
+            rebuild_project: false
+            path: version.yaml
+        secrets:
+            ACCESS_TOKEN: ${{ secrets.VERSION_VERIFY }}
+            BOT_GPG_KEY: ${{ secrets.BOT_GPG_KEY }}
+            
