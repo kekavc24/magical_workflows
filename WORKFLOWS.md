@@ -47,6 +47,7 @@ jobs:
             trigger_patch: ${{contains(github.event.pull_request.labels.*.name, 'patch release')}}
             bump_build: true
             create_tag: true
+            tag_prefix: ''
         secrets:
             ACCESS_TOKEN: ${{ secrets.TOKEN }}
             BOT_GPG_KEY: ${{ secrets.BOT_GPG_KEY }}
