@@ -54,7 +54,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
-          token: ${{ secrets.VERSION_VERIFY }}
+          token: ${{ secrets.ACCESS_TOKEN }}
 
       # Configure Commit Signing
       - name: 🌽 Corn-figure Git ;)
