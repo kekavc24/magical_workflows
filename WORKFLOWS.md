@@ -57,7 +57,7 @@ jobs:
 
 ```
 
-The commit in your will look like so 👇🏼:
+The commit in your repo will look like so 👇🏼:
 
 ![image](/assets/commit_snip.png)
 
