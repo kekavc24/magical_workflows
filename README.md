@@ -1,7 +1,7 @@
 # Magical Workflows/Actions
 Reusable workflows/actions using [magical_version_bump][mvb_github_link] package to modify your project's version. You can find the package [here][mvb_pub_link].
 
-Refer to the package's documentation for more info.
+Refer to the package's documentation for more information.
 
 ## Overview
 Consider using `v2` and above. Why?
