@@ -31,11 +31,16 @@ runs:
       shell: bash
       run: |
         target="";
-        if [[${{ inputs.major }} == "true"]]; then
+        if [[ $MAJOR == "true" ]]; then
           target="major"
-        elif [[${{ inputs.minor }} == "true"]]; then
+        elif [[ $MINOR == "true" ]]; then
           target="minor"
-        else
+        elif [[ $PATCH == "true" ]]; then
           target="patch"
         fi;
         echo "target=${target}" >> "$GITHUB_OUTPUT"
+      env:
+        MAJOR: '${{ inputs.major }}'
+        MINOR: '${{ inputs.minor }}'
+        PATCH: '${{ inputs.patch }}'
+        
