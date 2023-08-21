@@ -11,34 +11,34 @@ on:
 
     inputs:
       trigger_major:
-          description: Whether to add major as target
-          required: true
-          type: boolean
+        description: Whether to add major as target
+        required: true
+        type: boolean
 
       trigger_minor:
-          description: Whether to add minor as target
-          required: true
-          type: boolean
+        description: Whether to add minor as target
+        required: true
+        type: boolean
 
       trigger_patch:
-          description: Whether to add patch as target
-          required: true
-          type: boolean
+        description: Whether to add patch as target
+        required: true
+        type: boolean
 
       bump_build:
-          description: Whether to bump the build number
-          required: true
-          type: boolean
+        description: Whether to bump the build number
+        required: true
+        type: boolean
 
       create_tag:
-          description: Whether to create a tag with new version
-          required: true
-          type: boolean
+        description: Whether to create a tag with new version
+        required: true
+        type: boolean
 
       rebuild_project:
-          description: Whether to generate build/source files
-          required: true
-          type: boolean
+        description: Whether to generate build/source files
+        required: true
+        type: boolean
 
       tag_prefix:
         description: A prefix to append to tag i.e 'v'
@@ -47,16 +47,16 @@ on:
         type: string
 
       verify_build:
-          description: Whether to run test verifying the build
-          required: false
-          default: false
-          type: boolean
+        description: Whether to run test verifying the build
+        required: false
+        default: false
+        type: boolean
 
       path:
-          description: Path to yaml/json file
-          required: false
-          type: string
-          default: 'pubspec.yaml'
+        description: Path to yaml/json file
+        required: false
+        type: string
+        default: 'pubspec.yaml'
 
 jobs:
   bump_version:
@@ -110,7 +110,7 @@ jobs:
         with:
           path: ${{ inputs.path }}
 
-      - name: 🆕 Commit and Tag
+      - name: 🆕 Commit
         run: |
           git commit -am "chore: v${{steps.get_version.outputs.version}}"
           git push
@@ -126,10 +126,10 @@ jobs:
           git tag -a "${{ inputs.tag_prefix }}${{steps.get_version.outputs.version}}" HEAD -m "v${{steps.get_version.outputs.version}}"
           git push origin "${{ inputs.tag_prefix }}${{steps.get_version.outputs.version}}"
         env:
-            GIT_AUTHOR_NAME: ${{ steps.corn-fig-git.outputs.name }}
-            GIT_AUTHOR_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
-            GIT_COMMITTER_NAME: ${{ steps.corn-fig-git.outputs.name }}
-            GIT_COMMITTER_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
+          GIT_AUTHOR_NAME: ${{ steps.corn-fig-git.outputs.name }}
+          GIT_AUTHOR_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
+          GIT_COMMITTER_NAME: ${{ steps.corn-fig-git.outputs.name }}
+          GIT_COMMITTER_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
 
       - name: ✅ Verify build
         if: ${{ inputs.verify_build == true }}
