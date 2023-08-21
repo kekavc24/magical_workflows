@@ -70,21 +70,22 @@ jobs:
 
       - name: 🔍 Extract semVer target
         id: extract_target
-        uses: kekavc24/magical_workflows/.github/actions/extract_target@temp/add-action
+        uses: ./.github/actions/extract_target
         with:
           major: ${{ inputs.trigger_major }}
           minor: ${{ inputs.trigger_minor }}
           patch: ${{ inputs.trigger_patch }}
 
       - name: ⬆ Bump version
-        uses: kekavc24/magical_workflows/.github/actions/bump_version@v2
+        uses: ./.github/actions/bump_version
         with:
           target: ${{ steps.extract_target.outputs.target }}
           bump-build-number: ${{ inputs.bump_build }}
+          path: ${{ inputs.path }}
 
       - name: 🔍 Get version
         id: get_version
-        uses: kekavc24/magical_workflows/.github/actions/extract_version@temp/add-action
+        uses: ./.github/actions/extract_version
         with:
           path: ${{ inputs.path }}
 
