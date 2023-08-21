@@ -5,7 +5,7 @@ Refer to the package's documentation for more info.
 
 ## Overview
 Consider using `v2` and above. Why?
-1. `v1` is a reusable workflow and you may need to store the updated yaml file as an artifact and replacing the old one in a new job.
+1. `v1` has reusable workflows which do modify but you may need to store the updated yaml file as an artifact and replacing the old one in a new job.
 2. `v2` and above includes `actions` you can use in your steps. Reusable workflows also modify and push the changes to your repo.
 
 NB: Reusable workflows must be triggered as a `job` while actions are triggered in `steps`. [Learn more][learn_more_link].
