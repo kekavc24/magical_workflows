@@ -1,4 +1,4 @@
-name: Bump version in Flutter project
+name: Bump version in project
 
 on:
   workflow_call:
@@ -11,36 +11,53 @@ on:
 
     inputs:
       trigger_major:
-        description: Whether to add major as target
-        required: true
-        type: boolean
+          description: Whether to add major as target
+          required: true
+          type: boolean
 
       trigger_minor:
-        description: Whether to add minor as target
-        required: true
-        type: boolean
+          description: Whether to add minor as target
+          required: true
+          type: boolean
 
       trigger_patch:
-        description: Whether to add patch as target
-        required: true
-        type: boolean
+          description: Whether to add patch as target
+          required: true
+          type: boolean
 
       bump_build:
-        description: Whether to bump the build number
-        required: true
-        type: boolean
+          description: Whether to bump the build number
+          required: true
+          type: boolean
 
       create_tag:
-        description: Whether to create a tag with new version
-        required: true
-        type: boolean
+          description: Whether to create a tag with new version
+          required: true
+          type: boolean
+
+      rebuild_project:
+          description: Whether to generate build/source files
+          required: true
+          type: boolean
+
+      tag_prefix:
+        description: A prefix to append to tag i.e 'v'
+        required: false
+        default: 'v'
+        type: string
+
+      verify_build:
+          description: Whether to run test verifying the build
+          required: false
+          default: false
+          type: boolean
 
       path:
-        description: Path to yaml/json file
-        required: false
-        type: string
-        default: 'pubspec.yaml'
-      
+          description: Path to yaml/json file
+          required: false
+          type: string
+          default: 'pubspec.yaml'
+
 jobs:
   bump_version:
     runs-on: ubuntu-latest
@@ -83,6 +100,10 @@ jobs:
           bump-build-number: ${{ inputs.bump_build }}
           path: ${{ inputs.path }}
 
+      - name: 🧬 Generate build files
+        if: ${{ inputs.rebuild_project == true }}
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: 🔍 Get version
         id: get_version
         uses: ./.github/actions/extract_version
@@ -105,3 +126,15 @@ jobs:
           GIT_AUTHOR_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
           GIT_COMMITTER_NAME: ${{ steps.corn-fig-git.outputs.name }}
           GIT_COMMITTER_EMAIL: ${{ steps.corn-fig-git.outputs.email }}
+
+      - name: 🆕 Create Tag
+        if: ${{ inputs.create_tag == true }}
+        run: |
+          git tag -a "${{ inputs.tag_prefix }}${{steps.get_version.outputs.version}}" HEAD -m "v${{steps.get_version.outputs.version}}"
+
+      - name: ✅ Verify build
+        if: ${{ inputs.verify_build == true }}
+        run: |
+          git pull
+          dart pub get
+          dart run test --run-skipped -t version-verify
