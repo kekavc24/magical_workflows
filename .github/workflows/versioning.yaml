@@ -1,4 +1,4 @@
-name: Temp Bump Version
+name: Bump Version
 
 on:
     pull_request:
