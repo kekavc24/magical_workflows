@@ -58,7 +58,9 @@ jobs:
 
 ```
 
-The commit in your repo will look like so 👇🏼:
+The commit in your repo will have :
+1. Name of Author linked to GPG key
+2. Commit message
 
 ![image](/assets/commit_snip.png)
 
