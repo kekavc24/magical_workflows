@@ -5,17 +5,14 @@ inputs:
   major:
     description: 'Trigger for major version'
     required: true
-    type: boolean
 
   minor:
     description: 'Trigger for minor version'
     required: true
-    type: boolean
 
   patch:
     description: 'Trigger for patch version'
     required: true
-    type: boolean
 
 outputs:
   target: 

@@ -5,25 +5,19 @@ inputs:
   version:
     description: 'Version to set in yaml/json'
     required: true
-    type: string
 
   keep-pre:
     description: 'Indicate whether to keep pre-release version'
-    default: false
     required: false
-    type: boolean
 
   keep-build:
     description: 'Indicate whether to keep build-number'
-    default: false
     required: false
-    type: boolean
 
   path:
     description: 'Path to find the yaml/json file'
     default: 'pubspec.yaml'
     required: false
-    type: string
 
 runs:
   using: "composite"
@@ -48,7 +42,7 @@ runs:
     # Make sure you activate dart sdk!
     - name: ⚡ Activate Magical Bump CLI
       shell: bash
-      run: dart pub global activate magical_version_bump
+      run: dart pub global activate magical_version_bump 0.5.2
 
     - name: 🏪 Set version
       shell: bash
