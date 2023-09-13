@@ -5,7 +5,6 @@ inputs:
   path:
     description: Path to yaml/json file
     required: true
-    type: string
 
 outputs:
   version:

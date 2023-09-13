@@ -1,15 +1,20 @@
 # Magical Workflows
+
 Reusable workflows powered by [Magical Actions](/ACTIONS.md) and [magical_version_bump][mvb_github_link].
 
 ## Overview
+
 The available reusable workflows include:
+
 * Bump version in project
 
 ## Bump version in project
+
 This workflow `bumps` the version, creates a `tag` and `commits` it to the repo that called it.
 
 The required inputs include:
-* `trigger_major` - Must be a `boolean`. Acts as a trigger for `major` version. 
+
+* `trigger_major` - Must be a `boolean`. Acts as a trigger for `major` version.
 * `trigger_minor` - Must be a `boolean`. Acts as a trigger for `minor` version.
 * `trigger_patch` - Must be a `boolean`. Acts as a trigger for `patch` version.
 * `bump_build` - Must be a `boolean`. Whether to bump build version.
@@ -17,13 +22,15 @@ The required inputs include:
 * `rebuild_project` - Must be a `boolean`. Whether to generate any build file and commit them too. Uses [`build_runner`][br_link] package.
 
 Optional inputs include:
+
 * `tag_prefix` - Preferred prefix before tag version. Default value is `v`.
 * `verify_build` - Must be a `boolean`. Whether to run test verifying the generated files. Default value is `false`
 * `path` - Path to your yaml/json file. Default value is `pubspec.yaml`.
 
 You also have to pass in some `secrets` to give workflow access to change and commit them to your repo. These include:
+
 * `ACCESS_TOKEN` - helps bypass repo restrictions on default branch
-* `BOT_GPG_KEY` - A GPG key to sign the commits & tags. 
+* `BOT_GPG_KEY` - A GPG key to sign the commits & tags.
 
 Read more on generating a GPG key [here][gpg_link].
 
@@ -32,15 +39,17 @@ Read more on generating an access token [here][gen_token_link].
 Read more on adding secrets to your workflow [here][add_secrets_link].
 
 ### Usage
+
 This workflow can only be triggered as job and not a step. [Learn more][learn_more_link]
 
 The example below is triggered based on label present when PR is merged.
+
 ``` yaml
 
 jobs:
     update-version:
         needs: verify-merge
-        uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@v2.1.0
+        uses: kekavc24/magical_workflows/.github/workflows/bump_version.yaml@v2.1.1
         with:
             trigger_major: ${{contains(github.event.pull_request.labels.*.name, 'major release')}}
             trigger_minor: ${{contains(github.event.pull_request.labels.*.name, 'minor release')}}
@@ -59,6 +68,7 @@ jobs:
 ```
 
 The commit in your repo will have :
+
 1. Name of Author linked to GPG key
 2. Commit message
 
