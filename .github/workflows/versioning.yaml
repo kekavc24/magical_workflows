@@ -15,10 +15,6 @@ jobs:
             - name: 🛂 Ensure pull request was merged
               if: ${{ github.event.pull_request.merged != true }}
               run: exit 1
-
-            - name: 🛂 Ensure PR is a release
-              if: ${{! contains(github.event.pull_request.labels.*.name, 'tagged release')}}
-              run: exit 1
               
     update-version:
         needs: verify-merge
