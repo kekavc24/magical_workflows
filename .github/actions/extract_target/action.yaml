@@ -14,6 +14,10 @@ inputs:
     description: 'Trigger for patch version'
     required: true
 
+  bump_build:
+    description: Whether to bump the build number
+    required: true
+
 outputs:
   target: 
     description: A semver target to bump
@@ -29,15 +33,27 @@ runs:
       run: |
         target="";
         if [[ $MAJOR == "true" ]]; then
-          target="major"
-        elif [[ $MINOR == "true" ]]; then
-          target="minor"
-        elif [[ $PATCH == "true" ]]; then
-          target="patch"
+          target="major,"
         fi;
-        echo "target=${target}" >> "$GITHUB_OUTPUT"
+        
+        if [[ $MINOR == "true" ]]; then
+          target="${target}minor,"
+        fi;
+
+        if [[ $PATCH == "true" ]]; then
+          target="${target}patch,"
+        fi;
+
+        if [[ $BUILD == "true" ]]; then
+          target="${target}build-number,"
+        fi;
+
+        target="$(echo "${target}" | sed 's/.$//')"
+
+        echo "target=$target" >> "$GITHUB_OUTPUT"
       env:
         MAJOR: '${{ inputs.major }}'
         MINOR: '${{ inputs.minor }}'
         PATCH: '${{ inputs.patch }}'
+        BUILD: '${{ inputs.bump_build }}'
         

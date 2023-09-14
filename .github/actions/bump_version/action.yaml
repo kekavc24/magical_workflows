@@ -2,19 +2,34 @@ name: 'Bump version'
 description: Bumps semVer version string
 
 inputs:
-  target:
-    description: 'A SEMVER version target - major/minor/patch'
+  targets:
+    description: 'A SEMVER version target - major/minor/patch/build-number'
     default: "null"
-    required: false
+    required: true
 
-  bump-build-number:
-    description: 'Indicate whether to bump the build number'
-    default: "false"
+  strategy:
+    description: 'Whether to use relative/absolute versioning'
+    default: "relative"
     required: false
 
   path:
     description: 'Path to find the yaml/json file'
     default: 'pubspec.yaml'
+    required: false
+
+  use-pub:
+    description: 'Whether to use dart to activate package'
+    default: "true"
+    required: false
+
+  pub-version:
+    description: 'Package version to use from pub'
+    default: "1.0.0"
+    required: false
+
+  source-path:
+    description: 'Path to local package path'
+    default: '.'
     required: false
 
 runs:
@@ -24,25 +39,13 @@ runs:
     # Make sure you activate dart sdk!
     - name: ⚡ Activate Magical Bump CLI
       shell: bash
-      run: dart pub global activate magical_version_bump 0.5.2
-
-    - name: 🔍 Get targets
-      id: check_targets
-      shell: bash
       run: |
-        TARGETS="--"
-        versionTarget="${{inputs.target}}"
-        echo $versionTarget
-        if [[ "${{inputs.bump-build-number}}" == "true" ]]; then
-          TARGETS+="build-number --"
-        fi
-        if [[ -z "${{inputs.target}}" ]]; then
-          echo "noop"
+        if [[ "${{inputs.use-pub}}" == "true" ]]; then
+          dart pub global activate magical_version_bump ${{inputs.pub-version}}
         else
-          TARGETS+="${versionTarget}"
+          dart pub global activate --source=path "${{inputs.source-path}}"
         fi
-        echo "args=$TARGETS" | tee -a $GITHUB_OUTPUT
 
     - name: ✅ Bump version
       shell: bash
-      run: mag modify -b ${{ steps.check_targets.outputs.args }} --set-path="${{ inputs.path }}"
+      run: mag modify bump --targets "${{inputs.targets}}" --strategy "${{inputs.strategy}}" --dir "${{inputs.path}}"
